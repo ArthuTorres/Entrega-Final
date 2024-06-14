@@ -1,0 +1,140 @@
+<app-header />
+
+<div class="container">
+    <quick-column style="row-gap: 1rem;">
+        <quick-card>
+            <quick-card-header>
+                <quick-card-title>Serviço solicitado</quick-card-title>
+            </quick-card-header>
+
+            <quick-card-body *ngIf="solicitacao">
+                <quick-column>
+                    <quick-row>
+                        <quick-column *ngIf="solicitacao?.descricao_problema">
+                            <label for="">Descrição do problema</label>
+                            <span>
+                                <p *ngFor="let item of breakLines(solicitacao.descricao_problema)">{{item}}</p>
+                            </span>
+                        </quick-column>
+                    </quick-row><br>
+
+                    <quick-row *ngIf="solicitacao && solicitacao.cliente && solicitacao.cliente.user">
+                        <quick-column class="flex-1">
+                            <quick-row style="align-items: center;">
+                                <label for="">Cliente: </label>
+                                <p>{{solicitacao.cliente.user.name}}</p>
+                                <quick-button text="Enviar mensagem" *ngIf="solicitacao.cliente.user_id as userId" (onClick)="openMessages(userId)" />
+                            </quick-row>
+                            <quick-row>
+                                <label for="">Cidade: </label>
+                                <p>{{getCidade(solicitacao)}}</p>
+                            </quick-row>
+                            <quick-row>
+                                <label for="">Bairro: </label>
+                                <p>{{getBairro(solicitacao)}}</p>
+                            </quick-row>
+                        </quick-column>
+                        <quick-column class="flex-1">
+                            <quick-row>
+                                <label for="">Tipo de equipamento: </label>
+                                <p>{{solicitacao.tipo_equipamento}}</p>
+                            </quick-row>
+                            <quick-row>
+                                <label for="">Marca: </label>
+                                <p>{{solicitacao.marca}}</p>
+                            </quick-row>
+                            <quick-row>
+                                <label for="">Modelo: </label>
+                                <p>{{solicitacao.modelo}}</p>
+                            </quick-row>
+                        </quick-column>
+                    </quick-row><br>
+
+                    <quick-column>
+                        <label for="">Imagens</label>
+                        <quick-photo-galery [images]="images" [disabled]="true" />
+                    </quick-column>
+                </quick-column>
+            </quick-card-body>
+        </quick-card>
+
+        <quick-card
+            *ngIf="(!proposta || proposta.status == 0) && solicitacao && solicitacao.cliente && solicitacao.cliente.avaliacoes_cliente.length > 0">
+            <quick-card-header>
+                <quick-card-title>Reputação do cliente</quick-card-title>
+            </quick-card-header>
+            <quick-card-body>
+                <quick-column>
+                    <quick-row>
+                        <quick-column style="flex: 1; align-items: center; padding-top: 2rem;">
+                            <p class="rating-label">Nota geral</p>
+                            <p class="rating">{{calcularRatingCliente(solicitacao.cliente.avaliacoes_cliente) |
+                                number:'1.1-1'}}</p>
+                        </quick-column>
+                        <quick-column style="flex: 1;">
+                            @for (avaliacao of solicitacao.cliente.avaliacoes_cliente; track $index) {
+                            <quick-column style="border-bottom: solid 1px var(--gray-200); padding: 1rem 0;">
+                                <quick-row style="align-items: center;">
+                                    <p class="rating-title" style="flex: 1;">{{avaliacao.titulo}}</p>
+                                    <quick-star-rating [(ngModel)]="avaliacao.nota_cliente" disabled />
+                                </quick-row>
+                                <q>{{avaliacao.mensagem}}</q>
+                            </quick-column>
+                            }
+                        </quick-column>
+                    </quick-row>
+                </quick-column>
+            </quick-card-body>
+        </quick-card>
+
+        <quick-card [formGroup]="form">
+            <quick-card-header>
+                <quick-card-title>
+                    @if(!proposta?.id){ Escreva sua proposta } @else {
+                    @if(solicitacao?.status == 1) { Sua proposta foi escolhida, hora de iniciar o serviço!}
+                    @else if(solicitacao?.status == 2) { Executando serviço}
+                    @else if(solicitacao?.status == 3) { Serviço entregue}
+                    @else if(solicitacao?.status == 4) { Serviço concluído pelo cliente}
+                    @else { Proposta enviada}
+                    }
+                </quick-card-title>
+            </quick-card-header>
+
+            <quick-card-body>
+                <quick-column>
+                    <quick-form-field>
+                        <label for="">Descreva em detalhes o serviço que será realizado</label>
+                        <textarea cols="30" rows="10" formControlName="descricao_proposta"></textarea>
+                        <quick-form-error *ngIf="isInvalidField(form.get('descricao_proposta'))">Campo
+                            obrigatório</quick-form-error>
+                    </quick-form-field>
+
+                    <quick-row>
+                        <quick-form-field class="flex-1">
+                            <label for="">Informe o valor do serviço</label>
+                            <input type="number" min="0" formControlName="valor_servico" />
+                            <quick-form-error *ngIf="isInvalidField(form.get('valor_servico'))">Campo
+                                obrigatório</quick-form-error>
+                        </quick-form-field>
+                        <quick-form-field class="flex-1">
+                            <label for="">Informe o prazo de conclusão do serviço</label>
+                            <input type="text" formControlName="prazo" />
+                            <quick-form-error *ngIf="isInvalidField(form.get('prazo'))">Campo
+                                obrigatório</quick-form-error>
+                        </quick-form-field>
+                    </quick-row>
+                </quick-column>
+
+                <quick-button text="Enviar proposta" (onClick)="enviarProposta()" *ngIf="!proposta?.id" />
+                <quick-button text="Iniciar serviço" (onClick)="iniciarServico()" *ngIf="solicitacao?.status == 1" />
+                <quick-button text="Entregar serviço" (onClick)="entregarServico()" *ngIf="solicitacao?.status == 2" />
+            </quick-card-body>
+        </quick-card>
+
+        <app-avaliacao-cliente
+            *ngIf="proposta && proposta.status && [1,3].includes(proposta.status) && proposta.solicitacao_servico && proposta.solicitacao_servico.status == 4"
+            [solicitacao_servico]="proposta.solicitacao_servico" [proposta]="proposta" />
+
+    </quick-column>
+</div>
+<br />

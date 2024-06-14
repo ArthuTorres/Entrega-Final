@@ -1,0 +1,52 @@
+<app-header/>
+
+<div class="container">
+    <quick-column>
+        <quick-toolbar pageTitle="Buscador de serviços"></quick-toolbar>
+        <quick-card class="service-card" *ngFor="let servico of servicos">
+            <quick-card-header>
+                <quick-card-title class="flex-1">
+                    <quick-row class="cross-center">
+                        <span class="service-code">#{{servico.id}} |</span>
+                        <span>{{servico.tipo_equipamento}} - {{servico.marca}} - {{servico.modelo}}</span>
+                        <span class="flex-1"></span>
+                        <quick-button text="Enviar proposta" (onClick)="enviarProposta(servico)"></quick-button>
+                    </quick-row>
+                </quick-card-title>
+            </quick-card-header>
+            <quick-card-body *ngIf="servico.cliente">
+                <quick-column style="row-gap: .5rem;">
+                    <quick-row style="align-items: center;">
+                        <quick-column *ngIf="servico.cliente.avaliacoes_cliente as avaliacoes">
+                            <quick-rating-badge *ngIf="avaliacoes.length > 0"
+                                title="Nota do cliente - {{avaliacoes.length}} avaliações"
+                                [rating]="calcularRatingCliente(avaliacoes)" />
+                        </quick-column>
+                        <quick-column class="flex-1">
+                            <quick-row style="align-items: center;">
+                                <label for="">Cliente:</label>
+                                <p>{{servico.cliente.user.name}}</p>
+                            </quick-row>
+                        </quick-column>
+                        <quick-column class="flex-1">
+                            <quick-row>
+                                <label for="">Cidade:</label>
+                                <p>{{getCidade(servico)}}</p>
+                            </quick-row>
+                            <quick-row>
+                                <label for="">Bairro:</label>
+                                <p>{{getBairro(servico)}}</p>
+                            </quick-row>
+                        </quick-column>
+                    </quick-row>
+                    <quick-row>
+                        <quick-column>
+                            <label for="">Descrição do problema:</label>
+                            <p *ngFor="let line of breakLines(servico.descricao_problema)">{{line}}</p>
+                        </quick-column>
+                    </quick-row>
+                </quick-column>
+            </quick-card-body>
+        </quick-card>
+    </quick-column>
+</div>

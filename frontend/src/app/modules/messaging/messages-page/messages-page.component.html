@@ -1,0 +1,64 @@
+<app-header />
+
+<div class="container">
+    <quick-card>
+        <quick-card-header>
+            <quick-card-title class="flex-1">
+                <quick-row class="cross-center">
+                    <span>Mensagens</span>
+                    <span class="flex flex-1"></span>
+                    <quick-button text="Voltar" (onClick)="voltar()" />
+                </quick-row>
+            </quick-card-title>
+        </quick-card-header>
+        <quick-card-body>
+            <quick-row>
+                <quick-column class="contacts-pane">
+                    <h3>Contatos</h3>
+                    <ul class="contact-list">
+                        <li class="contact" *ngFor="let contact of contacts" (click)="selectContact(contact.contact_id)">
+                            <quick-column>
+                                <span class="contact-name">{{contact.contact_name}}</span>
+                                <span class="last-message">
+                                    <span class="author">{{contact.last_message_from_id == myId ? "Você": contact.contact_name.split(' ')[0]}}:</span>
+                                    <span>{{contact.last_message}}</span>
+                                </span>
+                            </quick-column>
+                        </li>
+                    </ul>
+                </quick-column>
+                <quick-column class="messages-pane" *ngIf="contactUser && currentChat; else noChatSelected">
+                    <h3>{{contactUser.name}}</h3>
+                    <hr>
+                    <ul class="messages" #messageList>
+                        <li class="message-placeholder" [ngClass]="{'mine': message.from_id == myId}"
+                            *ngFor="let message of currentChat">
+                            <quick-column class="message">
+                                <quick-row class="message-header">
+                                    <span class="author">{{message.from_id == myId ? 'Você' : contactUser.name.split('
+                                        ')[0]}}</span>
+                                    <span class="datetime">em {{message.created_at|date:'dd/MM/yyyy HH:mm'}}</span>
+                                </quick-row>
+                                <span class="message-text">{{message.message}}</span>
+                            </quick-column>
+                        </li>
+                    </ul>
+                    <hr>
+                    <form (submit)="sendMessage()" [formGroup]="sendMessageForm">
+                        <quick-row>
+                            <input
+                                style="display: flex; flex: 1; border-radius: .25rem; border:solid 1px #969696; padding: 0 .5rem;"
+                                type="text" formControlName="message">
+                            <quick-button text="Enviar" />
+                        </quick-row>
+                    </form>
+                </quick-column>
+                <ng-template #noChatSelected>
+                    <quick-column class="messages-pane empty">
+                        <span class="select-contact-info">Selecione um contato para ver as mensagens</span>
+                    </quick-column>
+                </ng-template>
+            </quick-row>
+        </quick-card-body>
+    </quick-card>
+</div>

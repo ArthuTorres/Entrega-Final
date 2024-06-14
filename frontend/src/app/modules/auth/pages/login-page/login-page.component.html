@@ -1,0 +1,28 @@
+<div class="page">
+    <form [formGroup]="loginForm">
+        <app-logo></app-logo>
+        <h1>Fazer login</h1>
+
+        <div class="flex-row stretch">
+            <quick-form-field>
+                <label for="email">Email</label>
+                <input type="email" formControlName="email" name="email" id="email" />
+            </quick-form-field>
+        </div>
+        <div class="flex-row stretch">
+            <quick-form-field>
+                <label for="password">Senha</label>
+                <input type="password" formControlName="password" name="password" id="password" />
+            </quick-form-field>
+        </div>
+
+        <div class="flex-row stretch">
+            <quick-button class="flex-1" text="Entrar" (onClick)="login()" [disabled]="!loginForm.valid" />
+        </div>
+
+        <div class="flex-column cross-center">
+            <a routerLink="/cadastro-cliente">Registrar como cliente</a>
+            <a routerLink="/cadastro-prestador-servico">Registrar como prestador de serviço</a>
+        </div>
+    </form>
+</div>

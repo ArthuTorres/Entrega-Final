@@ -1,0 +1,44 @@
+<form *ngIf="form" [formGroup]="form">
+    <quick-column class="container">
+        <quick-card>
+            <quick-card-header>
+                <quick-card-title>Avaliação do serviço</quick-card-title>
+            </quick-card-header>
+            <quick-card-body>
+                <quick-column>
+                    <quick-row>
+                        <quick-column style="flex:1;">
+                            <quick-form-field>
+                                <label>Como você avalia o serviço do profissional?</label>
+                                <quick-star-rating formControlName="nota_prestador" />
+                                <quick-form-error *ngIf="isFieldInvalid('nota_prestador')">Campo
+                                    obrigatório</quick-form-error>
+                            </quick-form-field>
+                            <quick-form-field>
+                                <label>Como você avalia o Portal de Serviços?</label>
+                                <quick-star-rating formControlName="nota_sistema" />
+                                <quick-form-error *ngIf="isFieldInvalid('nota_sistema')">Campo
+                                    obrigatório</quick-form-error>
+                            </quick-form-field>
+                        </quick-column>
+                        <quick-column style="flex:1;">
+                            <quick-form-field>
+                                <label>Título</label>
+                                <input type="text" class="form-control" formControlName="titulo" />
+                                <quick-form-error *ngIf="isFieldInvalid('titulo')">Campo
+                                    obrigatório</quick-form-error>
+                            </quick-form-field>
+                            <quick-form-field>
+                                <label>Escreva sua avaliação</label>
+                                <textarea class="form-control" formControlName="mensagem"></textarea>
+                                <quick-form-error *ngIf="isFieldInvalid('mensagem')">Campo
+                                    obrigatório</quick-form-error>
+                            </quick-form-field>
+                        </quick-column>
+                    </quick-row>
+                    <quick-button text="Enviar avaliação" *ngIf="!form.disabled" (onClick)="enviarAvaliacao()" />
+                </quick-column>
+            </quick-card-body>
+        </quick-card>
+    </quick-column>
+</form>

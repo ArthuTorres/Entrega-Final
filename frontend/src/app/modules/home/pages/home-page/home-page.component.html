@@ -1,0 +1,9 @@
+<app-header/>
+
+<main class="container" *ngIf="$profile|async as profile">
+    <quick-column>
+        <app-dashboard-servicos-cliente *ngIf="profile == 'cliente'" />
+        <app-dashboard-servicos-prestador *ngIf="profile == 'prestador-servico'" />
+        <app-dashboard-propostas-prestador *ngIf="profile == 'prestador-servico'" />
+    </quick-column>
+</main>

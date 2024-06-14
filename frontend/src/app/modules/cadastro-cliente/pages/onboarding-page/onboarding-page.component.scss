@@ -1,0 +1,33 @@
+.page {
+  background-color: var(--primary-color);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .form-area {
+    width: 960px;
+    box-sizing: border-box;
+    padding: 1rem;
+    background-color: var(--background-light);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100% - 2rem);
+    overflow-y: auto;
+
+    .header{
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+
+app-logo{
+  background-color: var(--accent-color);
+  padding: 1rem;
+  border-radius: 1rem;
+}

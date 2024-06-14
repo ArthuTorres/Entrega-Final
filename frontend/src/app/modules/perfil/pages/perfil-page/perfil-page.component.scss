@@ -1,0 +1,12 @@
+nav{
+    display: flex;
+    flex-direction: row;
+    height: 70px;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+
+    .container{
+        display: flex;
+        flex-direction: row;
+    }   
+}

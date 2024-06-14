@@ -1,0 +1,15 @@
+<quick-card>
+    <quick-card-header>
+        <quick-card-title>
+            <quick-row class="cross-center">
+                <span>Minhas solicitações de serviço</span>
+                <span class="flex-1"></span>
+                <quick-button text="Nova solicitação" (onClick)="novaSolicitacao()" />
+            </quick-row>
+        </quick-card-title>
+    </quick-card-header>
+    <quick-card-body>
+        <quick-datagrid [pagination]="paginationOptions" [data]="servicos" [options]="datagridOptions"
+            (onLoadRequested)="loadData($event)" (onEditRequested)="editItem($event)" />
+    </quick-card-body>
+</quick-card>

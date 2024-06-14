@@ -1,0 +1,33 @@
+nav {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  height: 70px;
+  color: var(--text-light);
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 1rem;
+
+    a {
+      text-decoration: none;
+      color: var(--text-light);
+      opacity: 0.6;
+      transition: ease-in all 200ms;
+      &:hover,
+      &.active {
+        opacity: 1;
+      }
+    }
+  }
+
+  &.customer {
+    background-color: var(--primary-color);
+  }
+
+  &.professional {
+    background-color: var(--accent-color);
+  }
+}

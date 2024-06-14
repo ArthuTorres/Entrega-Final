@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("../node_modules/@gimmeapps/gquicklib-angular/styles/reset.scss");
+@import url("./styles/theme.scss");
+@import url("./styles/typography.scss");
+@import url("./styles/flex.scss");
+
+@import url("./styles/page.scss");
+
+body {
+  background-color: #f3f6f9;
+}

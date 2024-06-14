@@ -1,0 +1,170 @@
+<app-header/>
+
+<div class="container" [formGroup]="form">
+    <quick-card *ngIf="propostaSelecionada">
+        <quick-card-header>
+            <quick-card-title>
+                @if(solicitacao?.status == 1){ Aguardando o prestador iniciar o serviço}
+                @else if(solicitacao?.status == 2){ O prestador iniciou o serviço}
+                @else if(solicitacao?.status == 3){ O prestador informou que o serviço foi concluído}
+                @else if(solicitacao?.status == 4){ Serviço finalizado}
+            </quick-card-title>
+        </quick-card-header>
+        <quick-card-body>
+            <quick-column>
+                <quick-row>
+                    <quick-row class="flex-1" style="align-items: center;">
+                        <label for="">Prestador: </label>
+                        <p>{{propostaSelecionada.prestador_servico.user?.name}}</p>
+                        <quick-button text="Enviar mensagem" *ngIf="propostaSelecionada.prestador_servico.user_id as userId" (onClick)="openMessages(userId)" />
+                    </quick-row>
+                    <quick-row class="flex-1">
+                    </quick-row>
+                </quick-row>
+                <quick-row>
+                    <quick-row class="flex-1">
+                        <label for="">Valor do serviço: </label>
+                        <p>{{propostaSelecionada.valor_servico |currency:"BRL"}}</p>
+                    </quick-row>
+                    <quick-row class="flex-1">
+                        <label for="">Previsão de conclusão: </label>
+                        <p>{{propostaSelecionada.prazo}}</p>
+                    </quick-row>
+                </quick-row>
+                <quick-column>
+                    <label for="">Descrição do serviço:</label>
+                    <p>{{propostaSelecionada.descricao_proposta}}</p>
+                </quick-column><br>
+
+                <quick-row>
+                    <quick-button text="Concluir serviço" (onClick)="concluirServico()"
+                        *ngIf="solicitacao?.status == 3" />
+                </quick-row>
+            </quick-column>
+        </quick-card-body>
+    </quick-card><br>
+
+    <quick-column *ngIf="!!objId && solicitacao?.status == 0">
+        <quick-toolbar *ngIf="propostas.length > 0" pageTitle="Propostas enviadas"></quick-toolbar>
+
+        <div class="grid-propostas">
+            <quick-card *ngFor="let proposta of propostas">
+                <quick-card-body>
+                    <quick-column>
+                        <quick-row style="margin-bottom: 2rem;">
+                            <quick-column class="flex-1 row-gap-1">
+                                <quick-row class="flex-1">
+                                    <label for="">Prestador: </label>
+                                    <p>{{proposta?.prestador_servico?.user?.name}}</p>
+                                </quick-row>
+                                <quick-row class="flex-1">
+                                    <label for="">Valor do serviço: </label>
+                                    <p>{{proposta.valor_servico |currency:"BRL"}}</p>
+                                </quick-row>
+                                <quick-row class="flex-1">
+                                    <label for="">Previsão de conclusão: </label>
+                                    <p>{{proposta.prazo}}</p>
+                                </quick-row>
+                                <quick-column>
+                                    <label for="">Descrição do serviço:</label>
+                                    <p>{{proposta.descricao_proposta}}</p>
+                                </quick-column>
+                            </quick-column>
+                            <quick-column class="flex-1 cross-center main-center">
+                                <h4 style="color: var(--primary-color); font-size: 1.15rem; font-weight: 600;">Nota
+                                    geral:</h4>
+                                <p class="rating">{{calcularRatingPrestador(proposta.prestador_servico.avaliacoes) |
+                                    number:'1.1-1'}}</p>
+                            </quick-column>
+                        </quick-row>
+
+                        <quick-row>
+                            <quick-button class="flex-1" color="accent" text="Enviar mensagem" *ngIf="proposta.prestador_servico.user_id as userId" (onClick)="openMessages(userId)" />
+                            <quick-button class="flex-1" text="Selecionar essa proposta"
+                                (onClick)="selecionar(proposta)" />
+                        </quick-row>
+                    </quick-column>
+                </quick-card-body>
+            </quick-card>
+        </div>
+        <br>
+    </quick-column>
+
+    <quick-column>
+        <quick-card>
+            <quick-card-header>
+                <quick-card-title>
+                    @if (objId) {
+                    Solicitação de serviço
+                    } @else {
+                    Nova solicitação de serviço
+                    }
+                </quick-card-title>
+            </quick-card-header>
+
+            <quick-card-body>
+                <quick-column>
+                    <quick-row>
+                        <quick-form-field>
+                            <label for="tipo_equipamento">Tipo de equipamento</label>
+                            <input #tipoEquipamento formControlName="tipo_equipamento" name="tipo_equipamento"
+                                id="tipo_equipamento" />
+                            <quick-form-autocomplete [options]="tiposEquipamento" [target]="tipoEquipamento"
+                                [control]="form.get('tipo_equipamento') ?? undefined" />
+                            <quick-form-error *ngIf="isInvalidField(form.get('tipo_equipamento'))">Campo
+                                obrigatório</quick-form-error>
+                        </quick-form-field>
+                        <quick-form-field>
+                            <label for="marca">Marca</label>
+                            <input #marca formControlName="marca" name="marca" id="marca" />
+                            <quick-form-autocomplete [options]="marcas" [target]="marca"
+                                [control]="form.get('marca') ?? undefined" />
+                            <quick-form-error *ngIf="isInvalidField(form.get('marca'))">Campo
+                                obrigatório</quick-form-error>
+                        </quick-form-field>
+                    </quick-row>
+                    <quick-row>
+                        <quick-form-field>
+                            <label for="modelo">Modelo</label>
+                            <input #modelo formControlName="modelo" name="modelo" id="modelo" />
+                            <quick-form-autocomplete [options]="modelos" [target]="modelo"
+                                [control]="form.get('modelo') ?? undefined" />
+                            <quick-form-error *ngIf="isInvalidField(form.get('modelo'))">Campo
+                                obrigatório</quick-form-error>
+                        </quick-form-field>
+                        <quick-form-field>
+                            <label for="periodo_preferencial">Período preferencial</label>
+                            <select formControlName="periodo_preferencial" name="periodo_preferencial"
+                                id="periodo_preferencial">
+                                <option value="1">Manhã</option>
+                                <option value="2">Tarde</option>
+                                <option value="3">Noite</option>
+                            </select>
+                            <quick-form-error *ngIf="isInvalidField(form.get('periodo_preferencial'))">Campo
+                                obrigatório</quick-form-error>
+                        </quick-form-field>
+                    </quick-row>
+                    <quick-form-field>
+                        <label for="descricao_problema">Descrição do problema</label>
+                        <textarea formControlName="descricao_problema" name="descricao_problema" id="descricao_problema"
+                            cols="30" rows="10"></textarea>
+                        <quick-form-error *ngIf="isInvalidField(form.get('descricao_problema'))">Campo
+                            obrigatório</quick-form-error>
+                    </quick-form-field>
+
+                    <quick-photo-galery style="margin-bottom: 1.25rem;" (onChange)="images=$event"
+                        (onRemove)="apagarFoto($event)" [disabled]="!!objId" [images]="images" />
+
+                    <quick-row>
+                        <quick-button text="Abrir solicitação" (onClick)="saveChanges()" *ngIf="!objId" />
+                        <quick-button color="danger" text="Cancelar solicitação" (onClick)="cancelRequest()"
+                            *ngIf="!!objId && solicitacao?.status == 0" />
+                    </quick-row>
+                </quick-column>
+            </quick-card-body>
+        </quick-card>
+    </quick-column>
+</div><br>
+
+<app-avaliacao-prestador *ngIf="objId && solicitacao?.status == 4 && propostaSelecionada"
+    [solicitacao_servico]="solicitacao" [proposta]="propostaSelecionada" /><br>

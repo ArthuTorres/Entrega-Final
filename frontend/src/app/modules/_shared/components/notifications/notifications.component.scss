@@ -1,0 +1,33 @@
+.notifications-wrapper{
+    position: relative;
+
+    .badge{
+        box-sizing: border-box;
+        padding: .5rem .75rem;
+        background-color: white;
+        color: var(--primary-color);
+        justify-content: center;
+        align-items: center;
+        border-radius: 2rem;
+        cursor: pointer;
+
+        .counter{
+            font-weight: 600;
+        }
+    }
+
+    .notifications-menu{
+        box-sizing: border-box;
+        position: absolute;
+        background-color: white;
+        right: 0;
+        width: 240px;
+        color: var(--gray-600);
+        border-radius: .25rem;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: 1rem;
+        max-height: 500;
+        overflow-y: auto;
+    }
+}

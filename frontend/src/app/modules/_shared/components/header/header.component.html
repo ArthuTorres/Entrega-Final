@@ -1,0 +1,31 @@
+<nav *ngIf="$selectedProfile | async as profile"
+    [ngClass]="{'customer':profile=='cliente', 'professional':profile=='prestador-servico'}">
+    <div class="container">
+        <app-logo />
+        <a routerLink="/prestadores/buscar-servicos" routerLinkActive="active"
+            *ngIf="profile == 'prestador-servico'">Buscar serviços</a>
+        <a routerLink="/mensagens" routerLinkActive="active">Mensagens</a>
+        <span class="flex-1"></span>
+        <div class="flex-row column-gap-1 cross-center" *ngIf="$profiles | async as profiles">
+            <span *ngIf="($userdata | async) as userdata">Olá, {{userdata.name}}</span>
+            <app-notifications />
+
+            <quick-button text="Criar perfil de cliente" componentStyle="grayed" color="accent"
+                *ngIf="!profiles.isCustomer" (onClick)="vincularCliente()" />
+            <quick-button text="Painel do cliente" componentStyle="grayed" color="accent"
+                *ngIf="profiles.isCustomer && profile !== 'cliente'" (onClick)="alterarPerfil('cliente')" />
+
+            <quick-button text="Criar perfil de prestador de serviço" componentStyle="grayed" color="accent"
+                *ngIf="!profiles.isProfessional" (onClick)="vincularPrestadorServico()" />
+
+            <quick-button text="Painel do prestador de serviço" componentStyle="grayed" color="accent"
+                *ngIf="profiles.isProfessional && profile !== 'prestador-servico'"
+                (onClick)="alterarPerfil('prestador-servico')" />
+
+            <quick-button text="Meus dados" componentStyle="grayed" color="accent" (onClick)="abrirPerfil()" />
+
+            <quick-button icon="logout" hint="Fazer logoff" componentStyle="grayed" color="accent"
+                (onClick)="logoff()" />
+        </div>
+    </div>
+</nav>

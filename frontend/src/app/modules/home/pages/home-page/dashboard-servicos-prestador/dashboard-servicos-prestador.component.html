@@ -1,0 +1,11 @@
+<quick-card>
+    <quick-card-header>
+        <quick-card-title>
+            Serviços em execução
+        </quick-card-title>
+    </quick-card-header>
+    <quick-card-body>
+        <quick-datagrid [pagination]="paginationOptions" [data]="propostas" [options]="datagridOptions"
+            (onLoadRequested)="loadData($event)" (onEditRequested)="editItem($event)" />
+    </quick-card-body>
+</quick-card>

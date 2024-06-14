@@ -1,0 +1,86 @@
+<div class="page">
+    <form class="form-area" *ngIf="form" [formGroup]="form">
+        <div class="header flex-row cross-center">
+            <app-logo></app-logo>
+            <span class="flex-1"></span>
+            <h1>Cadastro de prestador de serviços</h1>
+        </div>
+
+        <quick-row formGroupName="user">
+            <quick-form-field>
+                <label for="name">Nome</label>
+                <input type="text" id="name" name="name" formControlName="name" />
+                <quick-form-error *ngIf="!form.get('user')?.get('name')?.valid">Campo obrigatório</quick-form-error>
+            </quick-form-field>
+            <quick-form-field>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" formControlName="email" />
+                <quick-form-error *ngIf="!form.get('user')?.get('email')?.valid">Campo obrigatório</quick-form-error>
+            </quick-form-field>
+        </quick-row>
+
+        <div formGroupName="endereco">
+            <quick-row>
+                <quick-form-field>
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" formControlName="cep" />
+                    <quick-form-error *ngIf="!form.get('endereco')?.get('cep')?.valid">Campo
+                        obrigatório</quick-form-error>
+                </quick-form-field>
+                <quick-form-field>
+                    <label for="logradouro">Logradouro</label>
+                    <input type="text" id="logradouro" name="logradouro" formControlName="logradouro" />
+                    <quick-form-error
+                        *ngIf="!form.get('endereco')?.get('logradouro')?.disabled && !form.get('endereco')?.get('logradouro')?.valid">Campo
+                        obrigatório</quick-form-error>
+                </quick-form-field>
+                <quick-form-field>
+                    <label for="numero">Número</label>
+                    <input type="text" id="numero" name="numero" formControlName="numero" />
+                    <quick-form-error *ngIf="!form.get('endereco')?.get('numero')?.valid">Campo
+                        obrigatório</quick-form-error>
+                </quick-form-field>
+            </quick-row>
+
+            <quick-row>
+                <quick-form-field>
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" name="bairro" formControlName="bairro" />
+                    <quick-form-error
+                        *ngIf="!form.get('endereco')?.get('bairro')?.disabled && !form.get('endereco')?.get('bairro')?.valid">Campo
+                        obrigatório</quick-form-error>
+                </quick-form-field>
+                <quick-form-field>
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" name="cidade" formControlName="cidade" />
+                    <quick-form-error
+                        *ngIf="!form.get('endereco')?.get('cidade')?.disabled && !form.get('endereco')?.get('cidade')?.valid">Campo
+                        obrigatório</quick-form-error>
+                </quick-form-field>
+                <quick-form-field>
+                    <label for="estado">Estado</label>
+                    <input type="text" id="estado" name="estado" formControlName="estado" />
+                    <quick-form-error
+                        *ngIf="!form.get('endereco')?.get('estado')?.disabled && !form.get('endereco')?.get('estado')?.valid">Campo
+                        obrigatório</quick-form-error>
+                </quick-form-field>
+            </quick-row>
+        </div>
+
+        <quick-row formGroupName="user">
+            <quick-form-field>
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" formControlName="password" />
+                <quick-form-error *ngIf="!form.get('user')?.get('password')?.valid">Campo obrigatório</quick-form-error>
+            </quick-form-field>
+            <quick-form-field>
+                <label for="passwordConfirm">Confirme a senha</label>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" formControlName="passwordConfirm" />
+                <quick-form-error *ngIf="!form.get('user')?.get('passwordConfirm')?.valid">Campo
+                    obrigatório</quick-form-error>
+            </quick-form-field>
+        </quick-row>
+
+        <quick-button color="accent" text="Salvar" [disabled]="!form.valid" (onClick)="salvar()" />
+    </form>
+</div>
